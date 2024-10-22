@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ConversationResponse {
+public class ConversationResponseDto {
     private Long conversationId;
     private List<String> participants;
     private String lastMessage;

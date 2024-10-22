@@ -2,11 +2,13 @@ package com.clone.messenger.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.clone.messenger.dto.MessageDto;
+import com.clone.messenger.dto.MessageResponseDto;
 import com.clone.messenger.entities.Conversation;
 import com.clone.messenger.entities.Message;
 import com.clone.messenger.entities.User;
@@ -26,12 +28,16 @@ public class MessageService {
     @Autowired
     MessageRepository messageRepository;
 
-    public List<Conversation> getConversations() {
-        return conversationRepository.findAll();
-    }
+    public List<MessageResponseDto> getMessagesByConversationId(Long conversationId) {
+        List<Message> messages = messageRepository.findAllByConversationId(conversationId);
 
-    public List<Message> getMessagesByConversation(Long conversationId) {
-        return messageRepository.findAllByConversationId(conversationId);
+        return messages.stream()
+                .map(message -> new MessageResponseDto(
+                        message.getId(),
+                        message.getContent(),
+                        message.getSender().getUsername(),
+                        message.getCreatedAt()))
+                .collect(Collectors.toList());
     }
 
     public void sendMessage(Long conversationId, MessageDto messageDto) {

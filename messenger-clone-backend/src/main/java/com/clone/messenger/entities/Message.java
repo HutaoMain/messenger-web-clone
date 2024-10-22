@@ -23,5 +23,6 @@ public class Message {
     private User sender;
 
     private String content;
+
     private Date createdAt;
 }

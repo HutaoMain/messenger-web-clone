@@ -1,6 +1,6 @@
 interface MessageBubbleInterface {
   content: string;
-  sent: "receive" | "sent";
+  sent: boolean;
 }
 
 export default function MessageBubble({
