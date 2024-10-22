@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.clone.messenger.dto.ConversationResponse;
+import com.clone.messenger.dto.ConversationResponseDto;
 import com.clone.messenger.entities.Conversation;
 import com.clone.messenger.service.ConversationService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,8 +28,7 @@ public class ConversationController {
     }
 
     @GetMapping("/list")
-    public List<ConversationResponse> getConversations() {
+    public List<ConversationResponseDto> getConversations() {
         return conversationService.getAllConversationResponse();
     }
-
 }

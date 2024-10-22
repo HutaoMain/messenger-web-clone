@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.clone.messenger.dto.ConversationResponse;
+import com.clone.messenger.dto.ConversationResponseDto;
 import com.clone.messenger.entities.Conversation;
 import com.clone.messenger.entities.Message;
 import com.clone.messenger.entities.User;
@@ -23,12 +23,12 @@ public class ConversationService {
         return conversationRepository.save(conversation);
     }
 
-    public List<ConversationResponse> getAllConversationResponse() {
+    public List<ConversationResponseDto> getAllConversationResponse() {
         List<Conversation> conversations = conversationRepository.findAll();
 
         return conversations.stream()
                 .map(conversation -> {
-                    ConversationResponse conversationResponse = new ConversationResponse();
+                    ConversationResponseDto conversationResponse = new ConversationResponseDto();
 
                     // Populate conversation participants
                     List<String> participantUsernames = conversation.getParticipants().stream()

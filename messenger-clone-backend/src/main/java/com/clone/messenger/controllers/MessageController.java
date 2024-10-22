@@ -11,28 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.clone.messenger.dto.MessageDto;
-import com.clone.messenger.entities.Conversation;
-import com.clone.messenger.entities.Message;
+import com.clone.messenger.dto.MessageResponseDto;
 import com.clone.messenger.service.MessageService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/message")
 public class MessageController {
 
     @Autowired
     MessageService messengerService;
 
-    @GetMapping("/conversations")
-    public List<Conversation> getConversations() {
-        return messengerService.getConversations();
+    @GetMapping("/{conversationId}")
+    public List<MessageResponseDto> getMessages(@PathVariable Long conversationId) {
+        return messengerService.getMessagesByConversationId(conversationId);
     }
 
-    @GetMapping("/conversations/{conversationId}/messages")
-    public List<Message> getMessages(@PathVariable Long conversationId) {
-        return messengerService.getMessagesByConversation(conversationId);
-    }
-
-    @PostMapping("/conversations/{conversationId}/messages")
+    @PostMapping("/addMessage/{conversationId}")
     public void sendMessage(@PathVariable Long conversationId,
             @RequestBody MessageDto messageDto) {
         messengerService.sendMessage(conversationId, messageDto);
