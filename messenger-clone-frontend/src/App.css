@@ -170,3 +170,72 @@ html {
   cursor: pointer;
   color: #1877f2;
 }
+
+/* Login */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-card {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  max-width: 1000px;
+  width: 100%;
+  text-align: center;
+}
+
+.messenger-logo {
+  height: 70px;
+  width: auto;
+}
+
+.login-form {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-field {
+  margin-bottom: 15px;
+  width: 360px;
+  height: 30px;
+  padding: 10px;
+  border: 1px solid #c9c9c9;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.login-btn {
+  background: #0a7cff;
+  border-radius: 50px;
+  color: #fff;
+  font-size: 15px;
+  padding: 20px;
+  border: none;
+  width: 120px;
+}
+
+.forgot-password {
+  color: #1877f2;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.divider {
+  margin: 20px 0;
+  border: 0;
+  height: 1px;
+  background-color: #e0e0e0;
+}
+
+.create-account {
+  color: #1877f2;
+  font-weight: bold;
+  border-color: #1877f2;
+}

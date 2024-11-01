@@ -16,6 +16,8 @@ public class User {
 
     private String username;
 
+    private String password;
+
     @ManyToMany(mappedBy = "participants")
     private List<Conversation> conversations;
 }

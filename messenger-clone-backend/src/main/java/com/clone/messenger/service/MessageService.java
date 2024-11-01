@@ -29,7 +29,11 @@ public class MessageService {
     MessageRepository messageRepository;
 
     public List<MessageResponseDto> getMessagesByConversationId(Long conversationId) {
-        List<Message> messages = messageRepository.findAllByConversationId(conversationId);
+        List<Message> messages = messageRepository.findTopByOrderByCreatedAtDesc();
+
+        if (conversationId != null) {
+            messages = messageRepository.findAllByConversationId(conversationId);
+        }
 
         return messages.stream()
                 .map(message -> new MessageResponseDto(
