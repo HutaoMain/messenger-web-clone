@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.clone.messenger.dto.LoginDto;
 import com.clone.messenger.entities.User;
 import com.clone.messenger.repositories.UserRepository;
+import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,5 +50,9 @@ public class UserService {
         }
 
         return user;
+    }
+
+    public List<User> getUserList() {
+        return userRepository.findAll();
     }
 }

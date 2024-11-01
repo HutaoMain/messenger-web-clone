@@ -1,6 +1,6 @@
 interface ChatListInterface {
   user: string;
-  lastMessage: string;
+  lastMessage?: string;
   onClick: () => void;
 }
 
@@ -14,7 +14,7 @@ export default function ChatListItem({
       <div className="avatar" />
       <div className="chat-info">
         <div className="chat-name">{user}</div>
-        <div className="chat-preview">{lastMessage}</div>
+        {lastMessage && <div className="chat-preview">{lastMessage}</div>}
       </div>
     </div>
   );

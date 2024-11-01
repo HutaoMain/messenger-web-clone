@@ -1,38 +1,36 @@
 import { Search } from "@mui/icons-material";
 import ChatListItem from "./ChatListItem";
-import { useEffect, useState } from "react";
+import { UserInterface } from "../Interface";
 import axios from "axios";
 
 interface ChatSidebarInterface {
-  onChatSelect: (i: number) => void;
+  users: UserInterface[];
+  getConversationId: (i: number) => void;
+  userId1: string;
 }
 
-interface ConversationInterface {
-  conversationId: number;
-  participants: string[];
-  lastMessage: string;
-  lastMessageTimestamp: string;
-}
+export default function ChatSidebar({
+  users,
+  getConversationId,
+  userId1,
+}: ChatSidebarInterface) {
+  const startChat = async (userId2: number) => {
+    const userIdInt1 = parseInt(userId1);
 
-export default function ChatSidebar({ onChatSelect }: ChatSidebarInterface) {
-  const [conversations, setConversations] = useState<ConversationInterface[]>(
-    []
-  );
+    console.log("userId1: ", userId1, "userId2: ", userId2);
 
-  useEffect(() => {
-    const fetchConversations = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_APP_API_URL}/api/conversation/list`
-        );
-        setConversations(response.data);
-      } catch (error) {
-        console.error("There was an error fetching the conversations!", error);
-      }
-    };
-
-    fetchConversations();
-  }, []);
+    try {
+      const response = await axios.post(
+        `${
+          import.meta.env.VITE_APP_API_URL
+        }/api/conversation/createConversation`,
+        { userId1: userIdInt1, userId2: userId2 }
+      );
+      getConversationId(response.data.conversationId);
+    } catch (error) {
+      console.error("Error starting conversation", error);
+    }
+  };
 
   return (
     <div className="sidebar">
@@ -46,12 +44,11 @@ export default function ChatSidebar({ onChatSelect }: ChatSidebarInterface) {
         </div>
       </div>
       <div className="chat-list">
-        {conversations.map((conversation) => (
+        {users?.map((user) => (
           <ChatListItem
-            key={conversation.conversationId}
-            user={conversation.participants.join(", ")}
-            lastMessage={conversation.lastMessage}
-            onClick={() => onChatSelect(conversation.conversationId)}
+            key={user.id}
+            user={user.username}
+            onClick={() => startChat(user.id)}
           />
         ))}
       </div>

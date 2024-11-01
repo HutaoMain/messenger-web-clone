@@ -1,50 +1,26 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import ChatHeader from "./components/ChatHeader";
 import ChatInput from "./components/ChatInput";
 import ChatSidebar from "./components/ChatSidebar";
 import MessageBubble from "./components/MessageBubble";
-import axios from "axios";
 import Login from "./components/Login";
 import useAuthStore from "./AuthStore";
-
-interface MessageInterface {
-  content: string;
-  sent: boolean;
-}
+import { useMessages, useUserList } from "./tanstackQuery";
 
 function App() {
-  const user = useAuthStore((state) => state.user);
+  const userId1 = useAuthStore((state) => state.user);
 
   const [selectedConversationId, setSelectedConversationId] = useState<
     number | null
   >(null);
-  const [messages, setMessages] = useState<MessageInterface[]>([]);
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const url = selectedConversationId
-          ? `${
-              import.meta.env.VITE_APP_API_URL
-            }/api/message?conversationId=${selectedConversationId}`
-          : `${import.meta.env.VITE_APP_API_URL}/api/message`;
-
-        const response = await axios.get(url);
-        setMessages(response.data);
-      } catch (error) {
-        console.error("There was an error fetching the messages!", error);
-      }
-    };
-
-    fetchMessages();
-  }, [selectedConversationId]);
-
-  console.log("messages", messages);
+  const { data: users } = useUserList();
+  const { data: messages } = useMessages(selectedConversationId);
 
   return (
     <>
-      {user ? (
+      {userId1 ? (
         <div
           style={{
             display: "flex",
@@ -52,7 +28,11 @@ function App() {
             background: "white",
           }}
         >
-          <ChatSidebar onChatSelect={(id) => setSelectedConversationId(id)} />
+          <ChatSidebar
+            users={users || []}
+            getConversationId={(id) => setSelectedConversationId(id)}
+            userId1={userId1}
+          />
 
           <div
             style={{
@@ -61,10 +41,10 @@ function App() {
               flexDirection: "column",
             }}
           >
-            <ChatHeader user={`Conversation`} />
+            <ChatHeader user={selectedConversationId?.toString() || ""} />
 
             <div style={{ flex: 1, overflowY: "auto", padding: "16px" }}>
-              {messages.map((message, index) => (
+              {messages?.map((message, index) => (
                 <MessageBubble
                   key={index}
                   content={message.content}
@@ -73,7 +53,7 @@ function App() {
               ))}
             </div>
 
-            <ChatInput onSend={() => console.log("Message sent")} />
+            <ChatInput conversationId={selectedConversationId || 0} />
           </div>
         </div>
       ) : (

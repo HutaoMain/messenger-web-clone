@@ -20,7 +20,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     set({ user: null });
     setTimeout(() => {
       const url = new URL(window.location.href);
-      url.searchParams.delete("username");
+      url.searchParams.delete("userid");
       const newUrl = url.href;
       window.history.replaceState(null, "", newUrl);
       window.location.reload();

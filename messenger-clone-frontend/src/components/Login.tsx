@@ -25,7 +25,7 @@ export default function Login() {
       );
 
       if (res.status === 200) {
-        setUser(res.data.username);
+        setUser(res.data.id);
         console.log("Login successful");
       } else {
         setError("Something went wrong. Please try again.");
