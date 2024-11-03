@@ -19,41 +19,41 @@ import com.clone.messenger.repositories.UserRepository;
 @Service
 public class MessageService {
 
-    @Autowired
-    UserRepository userRepository;
+        @Autowired
+        UserRepository userRepository;
 
-    @Autowired
-    ConversationRepository conversationRepository;
+        @Autowired
+        ConversationRepository conversationRepository;
 
-    @Autowired
-    MessageRepository messageRepository;
+        @Autowired
+        MessageRepository messageRepository;
 
-    public List<MessageResponseDto> getMessagesByConversationId(Long conversationId) {
-        List<Message> messages = messageRepository.findTopByOrderByCreatedAtDesc();
+        public List<MessageResponseDto> getMessagesByConversationId(Long conversationId) {
+                List<Message> messages = messageRepository.findTopByOrderByCreatedAtDesc();
 
-        if (conversationId != null) {
-            messages = messageRepository.findAllByConversationId(conversationId);
+                if (conversationId != null) {
+                        messages = messageRepository.findAllByConversationId(conversationId);
+                }
+
+                return messages.stream()
+                                .map(message -> new MessageResponseDto(
+                                                message.getId(),
+                                                message.getContent(),
+                                                message.getSender().getUsername(),
+                                                message.getCreatedAt()))
+                                .collect(Collectors.toList());
         }
 
-        return messages.stream()
-                .map(message -> new MessageResponseDto(
-                        message.getId(),
-                        message.getContent(),
-                        message.getSender().getUsername(),
-                        message.getCreatedAt()))
-                .collect(Collectors.toList());
-    }
+        public void sendMessage(Long conversationId, MessageDto messageDto) {
+                Conversation conversation = conversationRepository.findById(conversationId).orElseThrow();
+                User sender = userRepository.findById(messageDto.getSenderId()).orElseThrow();
 
-    public void sendMessage(Long conversationId, MessageDto messageDto) {
-        Conversation conversation = conversationRepository.findById(conversationId).orElseThrow();
-        User sender = userRepository.findById(messageDto.getSenderId()).orElseThrow();
+                Message message = new Message();
+                message.setConversation(conversation);
+                message.setSender(sender);
+                message.setContent(messageDto.getContent());
+                message.setCreatedAt(new Date());
 
-        Message message = new Message();
-        message.setConversation(conversation);
-        message.setSender(sender);
-        message.setContent(messageDto.getContent());
-        message.setCreatedAt(new Date());
-
-        messageRepository.save(message);
-    }
+                messageRepository.save(message);
+        }
 }
